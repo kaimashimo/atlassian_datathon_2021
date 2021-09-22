@@ -9,6 +9,7 @@ __pycache__/
 *~
 venv/
 .pytest_cache/
+.ipynb_checkpoints
 
 # due to using tox and pytest
 .tox

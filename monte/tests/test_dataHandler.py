@@ -17,7 +17,7 @@ def test_loadData():
     # Columns should be 2
     assert(df.shape[0] == 3)
     # Rows should be 3
-    assert(df.shape[1] == 2)
+    assert(df.shape[1] == 3)
 
 def test_loadQualModel():
     qm = loadQualificationsModel("qualificationModel.json")
