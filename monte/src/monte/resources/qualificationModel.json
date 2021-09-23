@@ -1,27 +1,27 @@
 {
     "UEFA": {
         "direct":13,
-        "playoffs":0
+        "playoffs":-1
     },
 
     "CONMEBOL": {
         "direct":4,
-        "playoffs":1
+        "playoffs":5
     },
 
     "CONCACAF": {
         "direct":3,
-        "playoffs":1
+        "playoffs":4
     },
 
     "CAF": {
         "direct":5,
-        "playoffs":0
+        "playoffs":-1
     }, 
 
     "AFC": {
         "direct":4,
-        "playoffs":1
+        "playoffs":5
     },
 
     "OFC": {

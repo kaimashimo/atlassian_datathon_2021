@@ -2,7 +2,7 @@
 # testing in general, but rather to support the `find_packages` example in
 # setup.py that excludes installing the "tests" package
 
-from monte.dataHandler import loadData, loadQualificationsModel
+from monte.dataHandler import loadData, loadQualificationsModel, writeToFile
 
 # Ensure working in current dir
 import os
@@ -22,4 +22,8 @@ def test_loadData():
 def test_loadQualModel():
     qm = loadQualificationsModel("qualificationModel.json")
     print(qm)
-    assert(len(qm) == 7)
+    assert(len(qm) == 6)
+
+def test_writeToFile():
+    writeToFile('results.txt')
+

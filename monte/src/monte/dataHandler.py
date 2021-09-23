@@ -11,7 +11,7 @@ def loadData(path):
 def loadQualificationsModel(path):
     """Takes qualification model JSON file and returns usable dict"""
     try:
-        f = open(path, )
+        f = open(path)
     except Exception as e:
         raise Exception("Could not read df, possbily incorrect path: {}".format(e))
 
@@ -20,3 +20,8 @@ def loadQualificationsModel(path):
     f.close()
 
     return data
+
+def writeToFile(path, lst):
+    with open(path,'w') as f:
+        for item in lst:
+            f.write("{}\n".format(item))

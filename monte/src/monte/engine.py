@@ -70,13 +70,81 @@ class carlo:
                 if team1Won: self._incrementScore(region, pair[0])
                 else: self._incrementScore(region, pair[1])
     
-"""
-1. Within each region run every combination of match and create table (1st, 2nd, 3rd, etc.)
-2. According to qual model teams in each region either get assigned to 
-    a) passed i.e. gets into fifa
-    b) goes to play-offs
-3. should probably create another function that will run the whole sim
-"""
+    def _printRegionalTables(self):
+        for region in self.regionalTables.keys():
+            print(region + ":")
+            print(self.regionalTables[region].sort_values("points", ascending=False).reset_index(drop=True))
+            print()
+    
+    def runSim(self):
+        """
+        Driver program runs monte carlo simultion.
+        First run games per region then based off qualification model, choose which teams go to international playoffs.
+        Returns None.
+        """
+        print("Play games per region...")
+        # Play game per region to populate team score tables per region
+        self._playGamePerRegion(self.regions, self.regionalCombinations)
+        print("Done")
+        self._printRegionalTables()
+
+        # Decide which teams go to playoffs and which have qualified
+        for region in self.regions:
+            # Top n teams qualify directly
+            n = self.qualModelDict[region]["direct"]
+            # in qm dict playoffs is defined as nTh team goes to playoffs, but df is indexed starting from 0
+            nPlayoffs = self.qualModelDict[region]["playoffs"] - 1 
+
+            # Select top N teams that go directly to the FIFA
+            regionTable = self.regionalTables[region].sort_values("points", ascending=False).reset_index(drop=True)
+            topNTeams = regionTable.head(n).country.to_list()
+            self.qualified += topNTeams
+
+            # Check which countries must go to international playoffs
+            if nPlayoffs >= 0:
+                country = regionTable.iloc[nPlayoffs].country
+
+                # Change country region to playoffs 
+                self.teamValueDF.at[self.teamValueDF.loc[self.teamValueDF.country == country].index.item(), "region"] = "playoffs"
+
+        # Run admin operations to ensure playoffs run smoothly
+        playOffCountries = self.teamValueDF.loc[self.teamValueDF.region == "playoffs"].country.to_list()
+        self.regionalTables = {"playoffs":pd.DataFrame([], columns = ["country", "points"])}
+        playOffsCombinations = {"playoffs":_generateCombinations(playOffCountries)}
+
+        # Run playoffs & select winners that qualify
+        print("Running playoffs...")
+        self._playGamePerRegion(["playoffs"], playOffsCombinations)
+        print("Done")
+        self._printRegionalTables()
+        n = self.qualModelDict["playoffs"]["direct"]
+        regionTable = self.regionalTables["playoffs"].sort_values("points", ascending=False).reset_index(drop=True)
+        topNTeams = regionTable.head(n).country.to_list()
+        self.qualified += topNTeams
+
+
+        """
+        For each region:
+            sort table dict then:
+                select top N teams that go directly to the FIFA
+                If region supports playoffs (i.e. not -1) then:
+                    select team on the ladder that goes to playoffs and,
+                    change their region to playoffs in team value df
+        Select all countries that go to playoffs then,
+        replace the regionalTables dict with {"playoffs": dataframe(country, points)} and,
+        create new regionalCombinations list with all countries in playoffs
+
+        Run: play game per region with new list of playoff countries and regional combinations list
+        Once done sort dataframe and select top N teams that can qualify from regionals
+
+        Algorithm is done, self.qualified should be full with all teams
+        __init__ should write these teams to a text file
+        """
+
+def _topNteams(scoresDf, n):
+    """Given a regional scores df, retrieve top N countries from dataframe"""
+    sortedDf = scoresDf.sort_values("points", ascending=False).reset_index(drop=True)
+    return sortedDf.head(n).country.to_list()
 
 def _generateCombinations(countries):
     """Given a list of countries from a region return a list of all possible combinations"""

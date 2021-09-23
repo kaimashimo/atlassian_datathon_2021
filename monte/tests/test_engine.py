@@ -1,4 +1,4 @@
-# Ensure working in current dir
+# # Ensure working in current dir
 import os
 from pathlib import Path
 test_data_dir = Path(__file__).parent / "resources"
@@ -12,9 +12,9 @@ def test_carlo():
     print(bigBoi.teamValueDF, bigBoi.qualModelDict, bigBoi.regionalTables, bigBoi.regionalCombinations, bigBoi.regions)
 
     # Ensure that class variables have been initialised correctly
-    assert(len(bigBoi.regionalTables) == 7)
-    assert(len(bigBoi.regionalCombinations) == 7)
-    assert(len(bigBoi.regions) == 6)
+    assert(len(bigBoi.regionalTables) == 6)
+    assert(len(bigBoi.regionalCombinations) == 6)
+    assert(len(bigBoi.regions) == 5)
 
 def test_insertIntoRegionalTables():
     bigBoi = carlo(loadData("teamValueTest2.csv"), loadQualificationsModel("qualificationModel.json"))
@@ -33,6 +33,10 @@ def test_insertIntoRegionalTables():
     print(bigBoi.regionalTables)
     assert(bigBoi.regionalTables["AFC"].points.sum() == 2) # Aus: 2, SK: 0
     assert(bigBoi.regionalTables["UEFA"].points.sum() == 1) # France: 1
+
+def test_runSim():
+    bigBoi = carlo(loadData("teamValueTest2.csv"), loadQualificationsModel("qualificationModel.json"))
+    bigBoi.runSim()
 
 def test_playGamePerRegion():
     bigBoi = carlo(loadData("teamValueTest2.csv"), loadQualificationsModel("qualificationModel.json"))
