@@ -34,6 +34,7 @@ class backtest:
         print("Accuracy of backtest: {:.2f}".format(acc))
         print("{} correct preds".format(numCorrectPreds))
         print("{} incorrect preds".format(numFalsePreds))
+        print("List of correctly predicted countries: {}".format(self.correctPredsList))
 
 def Lower(lst):
     """Utility function to convert a list of strings to lower case"""

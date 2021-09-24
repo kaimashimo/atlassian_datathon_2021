@@ -13,7 +13,7 @@ def test_loadBackTestResults():
 def test_metrics():
     bt = backtest(["WRONG", "South Korea", "Japan"], "2018FifaResultsTest.txt")
     bt.printResults()
-    assert(bt.accuracy() == 1)
+    assert(round(bt.accuracy(), 2) == 0.67)
     assert(bt.numCorrectPreds() == 2)
     assert(bt.numFalsePreds() == 1)
 
