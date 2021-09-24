@@ -12,6 +12,10 @@ def get_page(country):
     if page.status_code == 200:
         return page
     
+    page = requests.get(f'https://en.wikipedia.org/wiki/{country}_men%27s_national_soccer_team')
+    if page.status_code == 200:
+        return page
+    
     return False
 
 def get_players(country):
@@ -80,14 +84,14 @@ def create_players_csv(country, dir='teams'):
         return False
 
     country_basename = country.replace(' ', '-').lower()
-    with open(f'{dir}/{country_basename}.csv', 'w') as file:
-        writer = csv.writer(file)
+    with open(f'{dir}/{country_basename}.csv', 'w') as f:
+        writer = csv.writer(f)
         writer.writerow(['No.', 'Position', 'Player', 'DOB', 'Current age', 'Caps', 'Goals', 'Club'])
         writer.writerows(all_players)
 
     return True
-    
-if __name__ == '__main__':
+
+def create_all_countries():
     failed = []
     with open('all-countries.txt', 'r') as f:
         for line in f.readlines():
@@ -97,3 +101,6 @@ if __name__ == '__main__':
 
     with open('fail-logs.txt', 'w') as f:
         print('\n'.join(failed), file=f)
+    
+if __name__ == '__main__':
+    create_players_csv('United States')
