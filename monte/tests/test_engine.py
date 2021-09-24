@@ -4,7 +4,7 @@ from pathlib import Path
 test_data_dir = Path(__file__).parent / "resources"
 os.chdir(test_data_dir)
 
-from monte.engine import carlo, _playGame, _valuetoProba 
+from monte.simulationEngine import carlo, _playGame, _valuetoProba 
 from monte.dataHandler import loadData, loadQualificationsModel
 
 def test_carlo():

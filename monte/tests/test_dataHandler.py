@@ -1,14 +1,27 @@
-# the inclusion of the tests module is not meant to offer best practices for
-# testing in general, but rather to support the `find_packages` example in
-# setup.py that excludes installing the "tests" package
-
-from monte.dataHandler import loadData, loadQualificationsModel, writeToFile
+import pytest
+from monte.dataHandler import *
 
 # Ensure working in current dir
 import os
 from pathlib import Path
 test_data_dir = Path(__file__).parent / "resources"
 os.chdir(test_data_dir)
+
+def test_argParse():
+    # Ensure raises error if incorrect file type
+    try: 
+        argParse(["py", "test", "test"])
+        pytest.raises(Exception("Should raise error cause incorrect args"))
+    except SystemExit:
+        pass
+    
+    # Test backtest results arg parse
+    try: 
+        argParse(["py", "test.csv", "test.json", "bt"])
+        pytest.raises(Exception("Should raise error cause incorrect args"))
+    except SystemExit:
+        pass
+
 
 def test_loadData():
     df = loadData("teamValueTest.csv")
@@ -25,5 +38,4 @@ def test_loadQualModel():
     assert(len(qm) == 6)
 
 def test_writeToFile():
-    writeToFile('results.txt')
-
+    writeToFile('results.txt', ["Australia", "Argentina"])
