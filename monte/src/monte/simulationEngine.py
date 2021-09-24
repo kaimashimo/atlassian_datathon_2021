@@ -151,7 +151,7 @@ def _generateCombinations(countries):
     return list(itertools.combinations(countries, 2))
 
 
-def _playGame(team1Proba, team2Proba, n = 10000):
+def _playGame(team1Proba, team2Proba, n = 5000):
     """
     Given a pair of countrie's probabiltiies flip coin N times and return the winner
     Return true if team1 wins (never assume draw)

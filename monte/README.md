@@ -1,1 +1,1 @@
-# TODO: Fill in readme
+Writing the readME left as an exercise to the reader.

@@ -17,7 +17,6 @@ def main():
 
     # Make sure correct args are passed
     args = argParse(sys.argv)
-    print(args)
 
     # Get team value data
     df = loadData(args.tvDF)
